@@ -1,69 +1,109 @@
 #include "pch.h"
 #include "defaults.h"
-#include "hellen_meta.h"
+//#include "hellen_meta.h"
 
 static void setInjectorPins() {
-	engineConfiguration->injectionPins[0] = Gpio::MM100_INJ1; // ok
-	engineConfiguration->injectionPins[1] = Gpio::MM100_INJ2; // ok
-	engineConfiguration->injectionPins[2] = Gpio::MM100_INJ3; // ok
-	engineConfiguration->injectionPins[3] = Gpio::MM100_INJ4; // ok
+	engineConfiguration->injectionPins[0] = Gpio::D3; // ok
+	engineConfiguration->injectionPins[1] = Gpio::A9; // ok
+	engineConfiguration->injectionPins[2] = Gpio::D11; // ok
+	engineConfiguration->injectionPins[3] = Gpio::D10; // ok
 
 }
 
 static void setIgnitionPins() {
-	engineConfiguration->ignitionPins[0] = Gpio::MM100_IGN1; // ok
-	engineConfiguration->ignitionPins[1] = Gpio::MM100_IGN2; // ok
+	engineConfiguration->ignitionPins[0] = Gpio::C13; // ok
+	engineConfiguration->ignitionPins[1] = Gpio::E5; // ok
 
 }
 
 static void setupDefaultSensorInputs() {
-	engineConfiguration->tps1_1AdcChannel = MM100_IN_TPS_ANALOG; // ok
-	engineConfiguration->tps1_2AdcChannel = MM100_IN_O2S_ANALOG; // ok
-	engineConfiguration->map.sensor.hwChannel = MM100_IN_MAP1_ANALOG; // ok
+	engineConfiguration->tps1_1AdcChannel = EFI_ADC_4; // ok
+	engineConfiguration->tps1_2AdcChannel = EFI_ADC_0; // ok
+	engineConfiguration->map.sensor.hwChannel = EFI_ADC_10; // ok
 
-	setPPSInputs(MM100_IN_PPS_ANALOG, MM100_IN_AUX2_ANALOG); // ok
+	setPPSInputs(EFI_ADC_3, EFI_ADC_14); // ok
 	engineConfiguration->enableAemXSeries = false; // we will see
 
-	engineConfiguration->clt.adcChannel = MM100_IN_CLT_ANALOG; // ok
+	engineConfiguration->clt.adcChannel = EFI_ADC_12; // ok
 
-	engineConfiguration->iat.adcChannel = MM100_IN_IAT_ANALOG; // ok
+	engineConfiguration->iat.adcChannel = EFI_ADC_13; // ok
 
-	engineConfiguration->triggerInputPins[0] = Gpio::MM100_UART8_TX; // VR2 max9924 is the safer default // TBD
-	engineConfiguration->camInputs[0] = Gpio::MM100_IN_D1; // HALL1 // TBD
-	engineConfiguration->camInputs[1] = Gpio::MM100_IN_D2; // HALL2 // TBD
+	engineConfiguration->triggerInputPins[0] = Gpio::B1; // VR2 max9924 is the safer default // TBD
+	engineConfiguration->camInputs[0] = Gpio::A6; // HALL1 // TBD
+	//engineConfiguration->camInputs[1] = Gpio::MM100_IN_D2; // HALL2 // TBD
 
-  engineConfiguration->vehicleSpeedSensorInputPin = Gpio::MM100_IN_VSS; // ok
+  engineConfiguration->vehicleSpeedSensorInputPin = Gpio::E11; // ok
 }
 
 //#include "hellen_leds_100.cpp" //TBD
 
+static void setupVbatt() {
+	// 5.6k high side/10k low side = 1.56 ratio divider
+	engineConfiguration->analogInputDividerCoefficient = 1.56f; // TBD
+	
+	// 6.34k high side/ 1k low side
+	engineConfiguration->vbattDividerCoeff = (6.34 + 1) / 1; //TBD
+
+	// Battery sense on PA7
+	engineConfiguration->vbattAdcChannel = EFI_ADC_0; //TBD
+
+	engineConfiguration->adcVcc = 3.3f;
+}
+
+void enableSpi1() {
+	engineConfiguration->spi1mosiPin = Gpio::B5;
+	engineConfiguration->spi1misoPin = Gpio::B4;
+	engineConfiguration->spi1sckPin = Gpio::B3;
+	engineConfiguration->is_enabled_spi_1 = true;
+}
+
+static void setSdCardSpi1NoCS() {
+    engineConfiguration->isSdCardEnabled = true;
+	engineConfiguration->sdCardSpiDevice = SPI_DEVICE_1;
+	enableSpi1();
+}
+
+static void setSdCardSpi1() {
+    setSdCardSpi1NoCS();
+    engineConfiguration->sdCardCsPin = Gpio::B6;
+}
+
 void setBoardConfigOverrides() {
-	setHellenMegaEnPin();
-	setHellenVbatt();
+	//setHellenMegaEnPin(); //TODO
+	setupVbatt(); //done
 
-	setHellenSdCardSpi1();
-	hellenMegaAccelerometerPreInitCS2Pin();
+	setSdCardSpi1(); //ok
+	//hellenMegaAccelerometerPreInitCS2Pin(); //TODO
 
-  engineConfiguration->vrThreshold[0].pin = Gpio::MM100_OUT_PWM5; // ok
-  engineConfiguration->vrThreshold[1].pin = Gpio::MM100_OUT_PWM6; // ok
+  engineConfiguration->vrThreshold[0].pin = Gpio::C9; // ok
+  engineConfiguration->vrThreshold[1].pin = Gpio::D14; // ok
 
-	setHellenCan();
+	//setHellenCan(); //below
 
-	setDefaultHellenAtPullUps();
+	//setDefaultHellenAtPullUps(); // TODO
+	engineConfiguration->clt.config.bias_resistor = 4700;
+	engineConfiguration->iat.config.bias_resistor = 4700;
 
 }
 
-static void setDefaultETBPins() {
-  // users would want to override those if using H-bridges for stepper idle control
+static void setEtbConfig() {
+	// TLE9201 driver
+	// This chip has three control pins:
+	// DIR - sets direction of the motor
+	// PWM - pwm control (enable high, coast low)
+	// DIS - disables motor (enable low)
 
-    // PWM pin
-    engineConfiguration->etbIo[0].controlPin = Gpio::MM100_OUT_PWM3; // TBD
-    // DIR pin
-	engineConfiguration->etbIo[0].directionPin1 = Gpio::MM100_OUT_PWM4; // TBD
-   	// Disable pin
-   	engineConfiguration->etbIo[0].disablePin = Gpio::MM100_SPI2_MISO; // TBD
-    // PWM pin
+	// Throttle #1
+	// PWM pin
+	engineConfiguration->etbIo[0].controlPin = Gpio::B8; //TBD
+	// DIR pin
+	engineConfiguration->etbIo[0].directionPin1 = Gpio::B9; //TBD
+	// Disable pin
+	engineConfiguration->etbIo[0].disablePin = Gpio::B7; //TBD
 
+
+	// we only have pwm/dir, no dira/dirb
+	engineConfiguration->etb_use_two_wires = false;
 }
 
 /**
@@ -75,9 +115,9 @@ static void setDefaultETBPins() {
 void setBoardDefaultConfiguration() {
 	setInjectorPins();
 	setIgnitionPins();
-	setDefaultETBPins();
+	setEtbConfig();
 
-  setHellenMMbaro();
+  //setHellenMMbaro(); // TODO
 
 	engineConfiguration->displayLogicLevelsInEngineSniffer = true; // ok
 
@@ -85,12 +125,12 @@ void setBoardDefaultConfiguration() {
 
 	engineConfiguration->enableSoftwareKnock = true; // ok
 
-	engineConfiguration->canTxPin = Gpio::MM100_CAN_TX; // ok
-	engineConfiguration->canRxPin = Gpio::MM100_CAN_RX; // ok
+	engineConfiguration->canTxPin = Gpio::D1; // ok
+	engineConfiguration->canRxPin = Gpio::D0; // ok
 
   //engineConfiguration->mainRelayPin = Gpio::MM100_IGN7; // ok
- 	engineConfiguration->fanPin = Gpio::MM100_INJ6; // ok
-	engineConfiguration->fuelPumpPin = Gpio::MM100_OUT_PWM1; // ok
+ 	engineConfiguration->fanPin = Gpio::A8; // ok
+	engineConfiguration->fuelPumpPin = Gpio::E18; // ok
 
 	// "required" hardware is done - set some reasonable defaults
 	setupDefaultSensorInputs();
@@ -99,39 +139,40 @@ void setBoardDefaultConfiguration() {
 	engineConfiguration->etbFunctions[0] = DC_Throttle1;
 
 	// Some sensible defaults for other options
-	setCrankOperationMode();
+	setCrankOperationMode(); //TODO
 
-	setAlgorithm(LM_SPEED_DENSITY);
+	setAlgorithm(LM_SPEED_DENSITY); //TODO
 
-	engineConfiguration->injectorCompensationMode = ICM_FixedRailPressure;
+	engineConfiguration->injectorCompensationMode = ICM_FixedRailPressure; //TODO
 
-	setCommonNTCSensor(&engineConfiguration->clt, HELLEN_DEFAULT_AT_PULLUP);
-	setCommonNTCSensor(&engineConfiguration->iat, HELLEN_DEFAULT_AT_PULLUP);
+	setCommonNTCSensor(&engineConfiguration->clt, 4700); //TODO
+	setCommonNTCSensor(&engineConfiguration->iat, 4700); //TODO
 
     setTPS1Calibration(100, 650);
 	//hellenWbo(); TBD
+	engineConfiguration->enableAemXSeries = true; // Wideband CAN
 }
 
 static Gpio OUTPUTS[] = {
-	Gpio::MM100_INJ6, // B1 injector output 6
-	Gpio::MM100_INJ5, // B2 injector output 5
-	Gpio::MM100_INJ4, // B3 injector output 4
-	Gpio::MM100_INJ3, // B4 injector output 3
-	Gpio::MM100_INJ2, // B5 injector output 2
-	Gpio::MM100_INJ1, // B6 injector output 1
-	Gpio::MM100_INJ7, // B7 Low Side output 1
-	Gpio::MM100_IGN8, // B8 Fan Relay Weak Low Side output 2
-	Gpio::MM100_IGN7, // B9 Main Relay Weak Low Side output 1
-	Gpio::MM100_OUT_PWM2, // B16 Low Side output 4 / Fuel Pump
-	Gpio::MM100_OUT_PWM1, // B17 Low Side output 3
-	Gpio::MM100_INJ8, // B18 Low Side output 2
+	Gpio::A8, // B1 injector output 6
+	Gpio::D2, // B2 injector output 5
+	Gpio::D10, // B3 injector output 4
+	Gpio::D11, // B4 injector output 3
+	Gpio::A9, // B5 injector output 2
+	Gpio::D3, // B6 injector output 1
+	Gpio::D15, // B7 Low Side output 1
+	Gpio::E6, // B8 Fan Relay Weak Low Side output 2
+	Gpio::B9, // B9 Main Relay Weak Low Side output 1
+	Gpio::C6, // B16 Low Side output 4 / Fuel Pump
+	Gpio::D13, // B17 Low Side output 3
+	Gpio::D12, // B18 Low Side output 2
 	// high sides
-	Gpio::MM100_IGN6, // B10 Coil 6
-	Gpio::MM100_IGN4, // B11 Coil 4
-	Gpio::MM100_IGN3, // B12 Coil 3
-	Gpio::MM100_IGN5, // B13 Coil 5
-	Gpio::MM100_IGN2, // B14 Coil 2
-	Gpio::MM100_IGN1, // B15 Coil 1
+	Gpio::B8, // B10 Coil 6
+	Gpio::E3, // B11 Coil 4
+	Gpio::E4, // B12 Coil 3
+	Gpio::E2, // B13 Coil 5
+	Gpio::E5, // B14 Coil 2
+	Gpio::C13, // B15 Coil 1
 };
 
 int getBoardMetaOutputsCount() {
