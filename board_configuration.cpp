@@ -186,7 +186,17 @@ int getBoardMetaLowSideOutputsCount() {
 Gpio* getBoardMetaOutputs() {
     return OUTPUTS;
 }
+Gpio getCommsLedPin() {
+	return Gpio::E7;
+}
 
+Gpio getRunningLedPin() {
+	return Gpio::D7;
+}
+
+Gpio getWarningLedPin() {
+	return Gpio::E8;
+}
 int getBoardMetaDcOutputsCount() {
     if (engineConfiguration->engineType == engine_type_e::HONDA_OBD1 ||
       engineConfiguration->engineType == engine_type_e::MAZDA_MIATA_NA6 ||
