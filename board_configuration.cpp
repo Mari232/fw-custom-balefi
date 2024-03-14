@@ -130,7 +130,7 @@ void setBoardDefaultConfiguration() {
 
   //engineConfiguration->mainRelayPin = Gpio::MM100_IGN7; // ok
  	engineConfiguration->fanPin = Gpio::A8; // ok
-	engineConfiguration->fuelPumpPin = Gpio::E18; // ok
+	engineConfiguration->fuelPumpPin = Gpio::D13; // ok
 
 	// "required" hardware is done - set some reasonable defaults
 	setupDefaultSensorInputs();
