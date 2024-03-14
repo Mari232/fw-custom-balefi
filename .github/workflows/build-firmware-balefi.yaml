@@ -1,4 +1,4 @@
-name: Create Board Firmware
+name: Create Balefi Firmware
 
 on:
   schedule:
@@ -31,7 +31,7 @@ jobs:
 
     - uses: ./ext/rusefi/.github/workflows/custom-board-build
       with:
-        meta-info:${{matrix.meta-info}}
+        meta-info: ${{matrix.meta-info}}
         artifacts: bin srec hex list map elf bundle autoupdate
         uploads: ini ${{steps.set-variables.outputs.upload}}
         push: ${{ steps.set-variables.outputs.push }}
