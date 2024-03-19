@@ -30,12 +30,10 @@ static void setupDefaultSensorInputs() {
 
 	engineConfiguration->triggerInputPins[0] = Gpio::B1; // VR2 max9924 is the safer default // TBD
 	engineConfiguration->camInputs[0] = Gpio::A6; // HALL1 // TBD
-	//engineConfiguration->camInputs[1] = Gpio::MM100_IN_D2; // HALL2 // TBD
 
   engineConfiguration->vehicleSpeedSensorInputPin = Gpio::E11; // ok
 }
 
-//#include "hellen_leds_100.cpp" //TBD
 
 static void setupVbatt() {
 	// 5.6k high side/10k low side = 1.56 ratio divider
