@@ -128,7 +128,7 @@ void setBoardDefaultConfiguration() {
 	engineConfiguration->canTxPin = Gpio::D1; // ok
 	engineConfiguration->canRxPin = Gpio::D0; // ok
 
-  //engineConfiguration->mainRelayPin = Gpio::MM100_IGN7; // ok
+    engineConfiguration->mainRelayPin = Gpio::C9; // ok
  	engineConfiguration->fanPin = Gpio::A8; // ok
 	engineConfiguration->fuelPumpPin = Gpio::D13; // ok
 
@@ -196,15 +196,4 @@ Gpio getRunningLedPin() {
 
 Gpio getWarningLedPin() {
 	return Gpio::E8;
-}
-int getBoardMetaDcOutputsCount() {
-    if (engineConfiguration->engineType == engine_type_e::HONDA_OBD1 ||
-      engineConfiguration->engineType == engine_type_e::MAZDA_MIATA_NA6 ||
-      engineConfiguration->engineType == engine_type_e::MAZDA_MIATA_NA94 ||
-      engineConfiguration->engineType == engine_type_e::MAZDA_MIATA_NA96 ||
-      engineConfiguration->engineType == engine_type_e::MAZDA_MIATA_NB1 ||
-      engineConfiguration->engineType == engine_type_e::MAZDA_MIATA_NB2) {
-        return 0;
-    }
-    return 2;
 }

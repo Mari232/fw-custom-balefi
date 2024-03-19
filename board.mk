@@ -5,6 +5,10 @@ BOARDCPPSRC =  $(BOARD_DIR)/board_configuration.cpp \
 BOARDINC += $(BOARD_DIR)/generated/controllers/generated
 
 # defines SHORT_BOARD_NAME
+DDEFS += -DFIRMWARE_ID=\"balefi\"
+DDEFS += -DEFI_MAIN_RELAY_CONTROL=TRUE
+DDEFS += -DEFI_SOFTWARE_KNOCK=TRUE -DSTM32_ADC_USE_ADC3=TRUE
+DDEFS += -DDIAG_5VP_PIN=Gpio::MM100_SPI3_MOSI
 include $(BOARD_DIR)/meta-info.env
 
 # reduce memory usage monitoring
