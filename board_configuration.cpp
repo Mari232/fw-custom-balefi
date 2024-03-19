@@ -18,7 +18,7 @@ static void setIgnitionPins() {
 
 static void setupDefaultSensorInputs() {
 	engineConfiguration->tps1_1AdcChannel = EFI_ADC_4; // ok
-	engineConfiguration->tps1_2AdcChannel = EFI_ADC_0; // ok
+	engineConfiguration->tps1_2AdcChannel = EFI_ADC_1; // ok
 	engineConfiguration->map.sensor.hwChannel = EFI_ADC_10; // ok
 
 	setPPSInputs(EFI_ADC_3, EFI_ADC_14); // ok
@@ -43,7 +43,7 @@ static void setupVbatt() {
 	engineConfiguration->vbattDividerCoeff = (6.34 + 1) / 1; //TBD
 
 	// Battery sense on PA7
-	engineConfiguration->vbattAdcChannel = EFI_ADC_0; //TBD
+	engineConfiguration->vbattAdcChannel = EFI_ADC_15; //DONE
 
 	engineConfiguration->adcVcc = 3.3f;
 }
