@@ -3,4 +3,4 @@
 //
 
 #define SIGNATURE_HASH 632254725
-#define TS_SIGNATURE "rusEFI default.2024.06.12.balefi.632254725"
+#define TS_SIGNATURE "rusEFI default.2024.06.13.balefi.632254725"
