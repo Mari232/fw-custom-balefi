@@ -16,27 +16,6 @@ static void setIgnitionPins() {
 
 }
 
-static void setupDefaultSensorInputs() {
-	engineConfiguration->tps1_1AdcChannel = EFI_ADC_4; // ok // PA4
-	engineConfiguration->tps1_2AdcChannel = EFI_ADC_1; // ok // PA1
-	engineConfiguration->map.sensor.hwChannel = EFI_ADC_10; // ok // PC0
-
-	setPPSInputs(EFI_ADC_3, EFI_ADC_14); // ok // PA3, PC4
-	engineConfiguration->enableAemXSeries = false; // we will see
-
-	engineConfiguration->clt.adcChannel = EFI_ADC_12; // ok // PC2
-
-	engineConfiguration->iat.adcChannel = EFI_ADC_13; // ok // PC3
-
-	engineConfiguration->triggerInputPins[0] = Gpio::B1; // VR2 max9924 is the safer default // TBD
-	engineConfiguration->camInputs[0] = Gpio::A6; // HALL1 // TBD
-
-  engineConfiguration->vehicleSpeedSensorInputPin = Gpio::E11; // ok
-//baro sensor
-	engineConfiguration->lps25BaroSensorScl = Gpio::B10;
-	engineConfiguration->lps25BaroSensorSda = Gpio::B11;
-
-}
 
 // static void init5vpDiag() {
 // #ifdef DIAG_5VP_PIN
@@ -125,6 +104,26 @@ void setBoardDefaultConfiguration() {
 	setIgnitionPins();
 	setEtbConfig();
 
+	engineConfiguration->tps1_1AdcChannel = EFI_ADC_4; // ok // PA4
+	engineConfiguration->tps1_2AdcChannel = EFI_ADC_1; // ok // PA1
+	engineConfiguration->map.sensor.hwChannel = EFI_ADC_10; // ok // PC0
+
+	setPPSInputs(EFI_ADC_3, EFI_ADC_14); // ok // PA3, PC4
+	engineConfiguration->enableAemXSeries = false; // we will see
+
+	engineConfiguration->clt.adcChannel = EFI_ADC_12; // ok // PC2
+
+	engineConfiguration->iat.adcChannel = EFI_ADC_13; // ok // PC3
+
+	engineConfiguration->triggerInputPins[0] = Gpio::B1; // VR2 max9924 is the safer default // TBD
+	engineConfiguration->camInputs[0] = Gpio::A6; // HALL1 // TBD
+
+  engineConfiguration->vehicleSpeedSensorInputPin = Gpio::E11; // ok
+//baro sensor
+	engineConfiguration->lps25BaroSensorScl = Gpio::B10;
+	engineConfiguration->lps25BaroSensorSda = Gpio::B11;
+
+
   //setHellenMMbaro(); // TODO
 
 	engineConfiguration->displayLogicLevelsInEngineSniffer = true; // ok
@@ -143,7 +142,7 @@ void setBoardDefaultConfiguration() {
 	engineConfiguration->tachOutputPin = Gpio::D15;
 
 	// "required" hardware is done - set some reasonable defaults
-//	setupDefaultSensorInputs();
+	
 	engineConfiguration->enableVerboseCanTx = true; // ok
 
 	engineConfiguration->etbFunctions[0] = DC_Throttle1;
