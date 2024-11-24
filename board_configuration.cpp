@@ -38,15 +38,15 @@ static void setupDefaultSensorInputs() {
 
 }
 
-static void init5vpDiag() {
-#ifdef DIAG_5VP_PIN
-static bool is5vpInit = false;
-  if (!is5vpInit) {
-    efiSetPadMode("5VP_STATE", DIAG_5VP_PIN, PAL_MODE_INPUT);
-    is5vpInit = true;
-  }
-#endif // DIAG_5VP_PIN
-}
+// static void init5vpDiag() {
+// #ifdef DIAG_5VP_PIN
+// static bool is5vpInit = false;
+//   if (!is5vpInit) {
+//     efiSetPadMode("5VP_STATE", DIAG_5VP_PIN, PAL_MODE_INPUT);
+//     is5vpInit = true;
+//   }
+// #endif // DIAG_5VP_PIN
+// }
 
 static void setupVbatt() {
 	// 2.7k high side/2.7k low side = 2 ratio divider
@@ -139,11 +139,11 @@ void setBoardDefaultConfiguration() {
     engineConfiguration->mainRelayPin = Gpio::C9; // ok
  	engineConfiguration->fanPin = Gpio::A8; // ok
 	engineConfiguration->fuelPumpPin = Gpio::D13; // ok
-	engineConfiguration->malfunctionIndicatorPin = Gpio::D14 // OK
-	engineConfiguration->tachOutputPin = Gpio::
+	engineConfiguration->malfunctionIndicatorPin = Gpio::D14; // OK
+	engineConfiguration->tachOutputPin = Gpio::D15;
 
 	// "required" hardware is done - set some reasonable defaults
-	setupDefaultSensorInputs();
+//	setupDefaultSensorInputs();
 	engineConfiguration->enableVerboseCanTx = true; // ok
 
 	engineConfiguration->etbFunctions[0] = DC_Throttle1;
