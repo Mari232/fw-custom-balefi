@@ -50,7 +50,7 @@ static void setupDefaultSensorInputs() {
 
 static void setupVbatt() {
 	// 2.7k high side/2.7k low side = 2 ratio divider
-	engineConfiguration->analogInputDividerCoefficient = 2f; // TBD  - check on dev board
+	engineConfiguration->analogInputDividerCoefficient = 2.0f; // TBD  - check on dev board
 	
 	// 6.34k high side/ 1k low side
 	engineConfiguration->vbattDividerCoeff = (6.34 + 1) / 1; //TBD
