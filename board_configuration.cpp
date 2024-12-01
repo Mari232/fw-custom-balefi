@@ -3,16 +3,16 @@
 //#include "hellen_meta.h"
 
 static void setInjectorPins() {
-	engineConfiguration->injectionPins[0] = Gpio::D3; // ok
-	engineConfiguration->injectionPins[1] = Gpio::A9; // ok
-	engineConfiguration->injectionPins[2] = Gpio::D11; // ok
-	engineConfiguration->injectionPins[3] = Gpio::D10; // ok
+	engineConfiguration->injectionPins[0] = Gpio::D12; 
+	engineConfiguration->injectionPins[1] = Gpio::D13; 
+	engineConfiguration->injectionPins[2] = Gpio::D11; 
+	engineConfiguration->injectionPins[3] = Gpio::D10; 
 
 }
 
 static void setIgnitionPins() {
-	engineConfiguration->ignitionPins[0] = Gpio::C13; // ok
-	engineConfiguration->ignitionPins[1] = Gpio::E5; // ok
+	engineConfiguration->ignitionPins[0] = Gpio::A8; 
+	engineConfiguration->ignitionPins[1] = Gpio::A9; 
 
 }
 
@@ -35,7 +35,7 @@ static void setupVbatt() {
 	engineConfiguration->vbattDividerCoeff = (6.34 + 1) / 1; //TBD
 
 	// Battery sense
-	engineConfiguration->vbattAdcChannel = EFI_ADC_11; //DONE // PC1
+	engineConfiguration->vbattAdcChannel = EFI_ADC_4;
 
 	engineConfiguration->adcVcc = 3.3f;
 }
@@ -59,15 +59,11 @@ static void setSdCardSpi1() {
 }
 
 void setBoardConfigOverrides() {
-	//setHellenMegaEnPin(); //TODO
+	
 	setupVbatt(); //done
 
-	setSdCardSpi1(); //ok
-	//hellenMegaAccelerometerPreInitCS2Pin(); //TODO
-
-	//setHellenCan(); //below
-
-	//setDefaultHellenAtPullUps(); // TODO
+	setSdCardSpi1(); 
+	
 	engineConfiguration->clt.config.bias_resistor = 4700;
 	engineConfiguration->iat.config.bias_resistor = 4700;
 
@@ -82,11 +78,11 @@ static void setEtbConfig() {
 
 	// Throttle #1
 	// PWM pin
-	engineConfiguration->etbIo[0].controlPin = Gpio::B8; //TBD
+	engineConfiguration->etbIo[0].controlPin = Gpio::D15; 
 	// DIR pin
-	engineConfiguration->etbIo[0].directionPin1 = Gpio::B9; //TBD
+	engineConfiguration->etbIo[0].directionPin1 = Gpio::C6; 
 	// Disable pin
-	engineConfiguration->etbIo[0].disablePin = Gpio::B7; //TBD
+	engineConfiguration->etbIo[0].disablePin = Gpio::D14; 
 
 
 	// we only have pwm/dir, no dira/dirb
@@ -104,21 +100,23 @@ void setBoardDefaultConfiguration() {
 	setIgnitionPins();
 	setEtbConfig();
 
-	engineConfiguration->tps1_1AdcChannel = EFI_ADC_4; // ok // PA4
-	engineConfiguration->tps1_2AdcChannel = EFI_ADC_1; // ok // PA1
-	engineConfiguration->map.sensor.hwChannel = EFI_ADC_10; // ok // PC0
+	engineConfiguration->tps1_1AdcChannel = EFI_ADC_10;
+	engineConfiguration->tps1_2AdcChannel = EFI_ADC_11;
+	engineConfiguration->map.sensor.hwChannel = EFI_ADC_3;
 
-	setPPSInputs(EFI_ADC_3, EFI_ADC_14); // ok // PA3, PC4
+	
+
+	setPPSInputs(EFI_ADC_1, EFI_ADC_0);
 	engineConfiguration->enableAemXSeries = false; // we will see
 
-	engineConfiguration->clt.adcChannel = EFI_ADC_12; // ok // PC2
+	engineConfiguration->clt.adcChannel = EFI_ADC_12;
 
-	engineConfiguration->iat.adcChannel = EFI_ADC_13; // ok // PC3
+	engineConfiguration->iat.adcChannel = EFI_ADC_13;
 
-	engineConfiguration->triggerInputPins[0] = Gpio::B1; // VR2 max9924 is the safer default // TBD
-	engineConfiguration->camInputs[0] = Gpio::A6; // HALL1 // TBD
+	engineConfiguration->triggerInputPins[0] = Gpio::E5; 
+	engineConfiguration->camInputs[0] = Gpio::E4; 
 
-  engineConfiguration->vehicleSpeedSensorInputPin = Gpio::E11; // ok
+  engineConfiguration->vehicleSpeedSensorInputPin = Gpio::E6; 
 //baro sensor
 	engineConfiguration->lps25BaroSensorScl = Gpio::B10;
 	engineConfiguration->lps25BaroSensorSda = Gpio::B11;
@@ -132,14 +130,14 @@ void setBoardDefaultConfiguration() {
 
 	engineConfiguration->enableSoftwareKnock = true; // ok
 
-	engineConfiguration->canTxPin = Gpio::D1; // ok
-	engineConfiguration->canRxPin = Gpio::D0; // ok
+	engineConfiguration->canTxPin = Gpio::D1; 
+	engineConfiguration->canRxPin = Gpio::D0; 
 
-    engineConfiguration->mainRelayPin = Gpio::C9; // ok
- 	engineConfiguration->fanPin = Gpio::A8; // ok
-	engineConfiguration->fuelPumpPin = Gpio::D13; // ok
-	engineConfiguration->malfunctionIndicatorPin = Gpio::D14; // OK
-	engineConfiguration->tachOutputPin = Gpio::D15;
+    engineConfiguration->mainRelayPin = Gpio::B15; // ok
+ 	engineConfiguration->fanPin = Gpio::B13; // ok
+	engineConfiguration->fuelPumpPin = Gpio::D8; // ok
+	engineConfiguration->malfunctionIndicatorPin = Gpio::D9; // OK
+	engineConfiguration->tachOutputPin = Gpio::B14;
 
 	// "required" hardware is done - set some reasonable defaults
 	
@@ -163,25 +161,17 @@ void setBoardDefaultConfiguration() {
 }
 
 static Gpio OUTPUTS[] = {
-	Gpio::A8, // B1 injector output 6
-	Gpio::D2, // B2 injector output 5
-	Gpio::D10, // B3 injector output 4
-	Gpio::D11, // B4 injector output 3
-	Gpio::A9, // B5 injector output 2
-	Gpio::D3, // B6 injector output 1
-	Gpio::D15, // B7 Low Side output 1
-	Gpio::E6, // B8 Fan Relay Weak Low Side output 2
-	Gpio::B9, // B9 Main Relay Weak Low Side output 1
-	Gpio::C6, // B16 Low Side output 4 / Fuel Pump
-	Gpio::D13, // B17 Low Side output 3
-	Gpio::D12, // B18 Low Side output 2
-	// high sides
-	Gpio::B8, // B10 Coil 6
-	Gpio::E3, // B11 Coil 4
-	Gpio::E4, // B12 Coil 3
-	Gpio::E2, // B13 Coil 5
-	Gpio::E5, // B14 Coil 2
-	Gpio::C13, // B15 Coil 1
+	Gpio::D8, 
+	Gpio::D9, 
+	Gpio::D10, 
+	Gpio::D11, 
+	Gpio::D12, 
+	Gpio::D13, 
+	Gpio::B15, 
+	Gpio::B14, 
+	Gpio::B13, 
+	Gpio::A8, 
+	Gpio::A9, 
 };
 
 int getBoardMetaOutputsCount() {
@@ -196,13 +186,13 @@ Gpio* getBoardMetaOutputs() {
     return OUTPUTS;
 }
 Gpio getCommsLedPin() {
-	return Gpio::E7;
+	return Gpio::A7; // LED3
 }
 
 Gpio getRunningLedPin() {
-	return Gpio::D7;
+	return Gpio::A6; // LED2
 }
 
 Gpio getWarningLedPin() {
-	return Gpio::E8;
+	return Gpio::A5; // LED4
 }
