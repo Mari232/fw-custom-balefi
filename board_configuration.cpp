@@ -100,8 +100,8 @@ void setBoardDefaultConfiguration() {
 	setIgnitionPins();
 	setEtbConfig();
 
-	engineConfiguration->tps1_1AdcChannel = EFI_ADC_10;
-	engineConfiguration->tps1_2AdcChannel = EFI_ADC_11;
+	engineConfiguration->tps1_1AdcChannel = EFI_ADC_13;
+	engineConfiguration->tps1_2AdcChannel = EFI_ADC_12;
 	engineConfiguration->map.sensor.hwChannel = EFI_ADC_3;
 
 	
@@ -109,12 +109,12 @@ void setBoardDefaultConfiguration() {
 	setPPSInputs(EFI_ADC_1, EFI_ADC_0);
 	engineConfiguration->enableAemXSeries = false; // we will see
 
-	engineConfiguration->clt.adcChannel = EFI_ADC_12;
+	engineConfiguration->clt.adcChannel = EFI_ADC_11;
 
-	engineConfiguration->iat.adcChannel = EFI_ADC_13;
+	engineConfiguration->iat.adcChannel = EFI_ADC_10;
 
-	engineConfiguration->triggerInputPins[0] = Gpio::E5; 
-	engineConfiguration->camInputs[0] = Gpio::E4; 
+	engineConfiguration->triggerInputPins[0] = Gpio::E4; 
+	engineConfiguration->camInputs[0] = Gpio::E5; 
 
   engineConfiguration->vehicleSpeedSensorInputPin = Gpio::E6; 
 //baro sensor

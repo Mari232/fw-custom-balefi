@@ -8,7 +8,7 @@
 #define KNOCK_ADC ADCD3
 
 // knock 1 - pin PA3
-#define KNOCK_ADC_CH1 ADC_CHANNEL_IN5
+#define KNOCK_ADC_CH1 ADC_CHANNEL_IN2
 #define KNOCK_PIN_CH1 Gpio::A2
 
 // Sample rate & time - depends on the exact MCU
