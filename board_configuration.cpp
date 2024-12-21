@@ -32,7 +32,7 @@ static void setupVbatt() {
 	engineConfiguration->analogInputDividerCoefficient = 2.0f; // TBD  - check on dev board
 	
 	// 6.34k high side/ 1k low side
-	engineConfiguration->vbattDividerCoeff = (6.34 + 1) / 1; //TBD
+	engineConfiguration->vbattDividerCoeff = ((33.0 + 4.7) / 4.7)*2; //TBD
 
 	// Battery sense
 	engineConfiguration->vbattAdcChannel = EFI_ADC_4;
