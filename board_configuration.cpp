@@ -103,7 +103,7 @@ void setBoardDefaultConfiguration() {
 	engineConfiguration->tps1_1AdcChannel = EFI_ADC_13;
 	engineConfiguration->tps1_2AdcChannel = EFI_ADC_12;
 	engineConfiguration->map.sensor.hwChannel = EFI_ADC_3;
-
+	engineConfiguration->ignitionKeyDigitalPin = Gpio::E15;
 	
 
 	setPPSInputs(EFI_ADC_1, EFI_ADC_0);
