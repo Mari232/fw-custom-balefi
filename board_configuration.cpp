@@ -121,6 +121,11 @@ void setBoardDefaultConfiguration() {
 	engineConfiguration->lps25BaroSensorScl = Gpio::B10;
 	engineConfiguration->lps25BaroSensorSda = Gpio::B11;
 
+// SPI3 for onboard EGT
+
+	engineConfiguration->is_enabled_spi_3 = true;
+	engineConfiguration->spi3misoPin = Gpio::C11;
+	engineConfiguration->spi3sckPin = Gpio::C10;
 
   //setHellenMMbaro(); // TODO
 
